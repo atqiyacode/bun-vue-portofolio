@@ -2,12 +2,14 @@
 
 set -e
 
-# Replace these with your bot token and chat ID
-BRANCH="production"
+# Replace these with your branch name
+BRANCH="<CHANGE BRANCH NAME>"
 
+# Replace these with your bot token and chat ID
 TELEGRAM_BOT_TOKEN="<YOUR_BOT_TOKEN>"
 TELEGRAM_CHAT_ID="<YOUR_CHAT_ID>"
 
+# disbaled it if not use telegram alert
 function send_telegram_alert {
     local message="$1"
     curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
@@ -15,12 +17,14 @@ function send_telegram_alert {
     -d text="$message"
 }
 
+# disbaled it if not use telegram alert
 function error_exit {
     local message="$1"
     send_telegram_alert "🔴 Deployment failed: $message"
     exit 1
 }
 
+# start deploy process
 echo "✅ Deploying Application ..."
 
 # Update codebase
@@ -44,7 +48,8 @@ else
     error_exit "🚨 Failed to Build."
 fi
 
-# Send success alert
+# Send success alert if use telegram alert bot
 send_telegram_alert "🟢 Deployment succeeded. The application is now live."
 
+# finish deploy
 echo "✅ Application Deployed Successfully"
