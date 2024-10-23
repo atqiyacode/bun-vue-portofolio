@@ -1,0 +1,30 @@
+name: Deploy on Production Branch
+
+on:
+  push:
+    branches: ['production']
+  pull_request:
+    branches: ['production']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSHKEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            echo "Current branch ref: ${{ github.ref }}"
+            if [ "${{ github.ref }}" = "refs/heads/development" ]; then
+              DEPLOY_PATH="${{ secrets.DEPLOY_PATH_DEVELOPMENT }}"
+            else
+              DEPLOY_PATH="${{ secrets.DEPLOY_PATH_PRODUCTION }}"
+            fi
+            echo "Deploying to $DEPLOY_PATH"
+            cd $DEPLOY_PATH && entrypoint.sh
