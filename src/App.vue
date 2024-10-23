@@ -56,6 +56,7 @@ const onDockItemClick = (
       <Dock :model="items" position="bottom">
         <template #item="{ item }">
           <Avatar
+            :alt="item.label"
             :image="item.icon"
             class="p-dock-link"
             size="xlarge"
