@@ -1,27 +1,10 @@
-<template>
-  <div class="card dock-demo">
-    <div class="dock-window">
-      <Dock :model="items" :position="position">
-        <template #item="{ item }">
-          <Avatar
-            :image="item.icon"
-            class="p-dock-link"
-            size="xlarge"
-            @click="onDockItemClick($event, item)"
-            v-tooltip.top="item.label"
-          />
-        </template>
-      </Dock>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import Avatar from 'primevue/avatar'
 import Dock from 'primevue/dock'
+import type { MenuItem } from 'primevue/menuitem'
 import { ref } from 'vue'
 
-const items = ref([
+const items = ref<MenuItem[]>([
   {
     label: 'App Store',
     icon: 'https://primefaces.org/cdn/primevue/images/dock/appstore.svg',
@@ -51,15 +34,39 @@ const items = ref([
     },
   },
 ])
-const position = ref('bottom')
 
-const onDockItemClick = (event, item) => {
+const onDockItemClick = (
+  event: MouseEvent, // Use MouseEvent for click events
+  item: MenuItem,
+) => {
   if (item.command) {
-    item.command()
+    // Call command with the appropriate event structure
+    item.command({
+      originalEvent: event, // Pass the MouseEvent
+      item, // Pass the clicked item
+    })
   }
   event.preventDefault()
 }
 </script>
+
+<template>
+  <div class="card dock-demo">
+    <div class="dock-window">
+      <Dock :model="items" position="bottom">
+        <template #item="{ item }">
+          <Avatar
+            :image="item.icon"
+            class="p-dock-link"
+            size="xlarge"
+            @click="onDockItemClick($event, item)"
+            v-tooltip.top="item.label"
+          />
+        </template>
+      </Dock>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .dock-demo > .dock-window {
