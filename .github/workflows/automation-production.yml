@@ -27,4 +27,4 @@ jobs:
               DEPLOY_PATH="${{ secrets.DEPLOY_PATH_PRODUCTION }}"
             fi
             echo "Deploying to $DEPLOY_PATH"
-            cd $DEPLOY_PATH && entrypoint.sh
+            cd $DEPLOY_PATH && ./entrypoint.sh
