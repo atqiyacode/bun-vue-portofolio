@@ -27,4 +27,7 @@ jobs:
               DEPLOY_PATH="${{ secrets.DEPLOY_PATH_PRODUCTION }}"
             fi
             echo "Deploying to $DEPLOY_PATH"
+            export BUN_INSTALL="$HOME/.bun"
+            export PATH="$BUN_INSTALL/bin:$PATH"
+            bun --version # Verifikasi bun
             cd $DEPLOY_PATH && ./entrypoint.sh
