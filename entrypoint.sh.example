@@ -34,16 +34,16 @@ else
     error_exit "🚨 Failed to update codebase."
 fi
 
-# NPM Install
+# BUN Install
 if bun install; then
     echo "✅ BUN Install"
 else
     error_exit "🚨 Failed to run BUN Install."
 fi
 
-# NPM run Build
-if vite build; then
-    echo "✅ Run vite build."
+# bunx + vite run Build
+if bunx --bun vite build; then
+    echo "✅ Run bunx --bun vite build."
 else
     error_exit "🚨 Failed to Build."
 fi
