@@ -5,6 +5,9 @@ set -e
 # Replace these with your branch name
 BRANCH="<CHANGE BRANCH NAME>"
 
+# Application Name
+APP_NAME="<APP NAME>"
+
 # Replace these with your bot token and chat ID
 TELEGRAM_BOT_TOKEN="<YOUR_BOT_TOKEN>"
 TELEGRAM_CHAT_ID="<YOUR_CHAT_ID>"
@@ -14,13 +17,13 @@ function send_telegram_alert {
     local message="$1"
     curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
     -d chat_id="$TELEGRAM_CHAT_ID" \
-    -d text="$message"
+    -d text="$message - ($APP_NAME)"
 }
 
 # disbaled it if not use telegram alert
 function error_exit {
     local message="$1"
-    send_telegram_alert "🔴 Deployment failed: $message"
+    send_telegram_alert "🔴 Deployment failed: $message - ($APP_NAME)"
     exit 1
 }
 
@@ -44,6 +47,10 @@ fi
 # bunx + vite run Build
 if bunx --bun vite build; then
     echo "✅ Run bunx --bun vite build."
+
+    # Hapus node_modules setelah build berhasil
+    rm -rf node_modules
+    echo "✅ node_modules folder removed."
 else
     error_exit "🚨 Failed to Build."
 fi
